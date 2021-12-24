@@ -69,8 +69,8 @@ class DiGraph(GraphInterface):
         :param node_id2:
         :return: true if succeed
         """
-        edge = self.edge_dic[(node_id1, node_id2)]
-        self.get_node(node_id1).remove_edge(node_id1, node_id2)
+        self.get_node(node_id1).remove_edge_out(node_id2)
+        self.get_node(node_id2).remove_edge_in(node_id1)
         try:
             del self.edge_dic[(node_id1, node_id2)]
             self._e_size -= 1
@@ -111,7 +111,7 @@ class DiGraph(GraphInterface):
         """
         return self.node_dic
 
-    def get_node(self, node_id):
+    def get_node(self, node_id) -> Node:
         """
         :param node_id:
         :return: return node -key = node_id

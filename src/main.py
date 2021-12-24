@@ -65,15 +65,13 @@ def check1():
     print(g_algo.shortest_path(0, 3))
     print(g_algo.shortest_path(3, 1))
     print(g_algo.centerPoint())
-    print(g_algo.floidCenter())
+
     file = "../data/A1.json"
     g_algo.load_from_json(file)
     print(g_algo.centerPoint())
-    print(g_algo.floidCenter())
     file = "../data/A2.json"
     g_algo.load_from_json(file)
     print(g_algo.centerPoint())
-    print(g_algo.floidCenter())
 
     g_algo.plot_graph()
     #g_algo.save_to_json(file + '_saved')
@@ -124,6 +122,18 @@ def check3():
     print(g_algo.centerPoint())
     print(g_algo.TSP([1, 2, 4]))
     g_algo.plot_graph()
+
+
+def main():
+    g_algo = GraphAlgo()
+    file = '../data/A5.json'
+    g_algo.load_from_json(file)
+    g_algo.graph.remove_edge(13, 14)
+    g_algo.plot_graph()
+    x = g_algo.graph.v_size()
+    g_algo.graph.add_node(x)
+    g_algo.graph.add_edge(1,x,1)
+    print(g_algo.centerPoint())
 
 
 if __name__ == '__main__':
