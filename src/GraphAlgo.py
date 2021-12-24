@@ -332,49 +332,6 @@ class GraphAlgo(GraphAlgoInterface):
         self.graph.get_node(src).D = D
         return
 
-    def new_dijkstra(self, src):
-        visited = []
-        self.path[src][src] = [src]
-        D = {v: float('inf') for v in range(self.graph.v_size())}
-        D[src] = 0
-        Q = PriorityQueue()
-        Q.put((0, src))
-        while not Q.empty():
-            (dist, current) = Q.get()
-            visited.append(current)
-            for i in self.graph.all_out_edges_of_node(current):
-                dest = i
-                distance = self.edges[current][dest]
-                if i not in visited:
-                    old = D[dest]
-                    new = D[current] + distance
-                    if new < old:
-                        Q.put((new, dest))
-                        D[dest] = new
-                        if src != dest and src != current and dest != current:
-                            try:
-                                if len(self.path[src][dest]) > 0:
-                                    self.path[src][dest].clear()
-
-                            except KeyError:
-                                pass
-                            try:
-                                for j in self.path[src][current]:
-                                    self.path[src][dest].append(j)
-
-                                for j in self.path[current][dest]:
-                                    self.path[src][dest].append(j)
-                            except KeyError:
-                                pass
-
-        '''for i in range(len(self.path)):
-            for j in range(len(self.path)):
-                if self.path[i][j]:
-                    self.path[i][j][:0] = [src]'''
-        self.graph.get_node(src).dijkstra_flag = True
-        self.graph.get_node(src).D = D
-        return
-
     def relax(self, D, Q, current, i):
         new = D[current] + self.graph.edge_dic[(current, i)]
         if new < D[i]:
@@ -394,40 +351,3 @@ class GraphAlgo(GraphAlgoInterface):
                 self.relax(D, Q, current, i)
         self.graph.get_node(src).D = D
         return
-
-    def floidCenter(self):
-        dist = [[0 for _ in range(self.graph.v_size())] for _ in range(self.graph.v_size())]
-        for i in self.graph.edge_dic:
-            dist[i[0]][i[1]] = self.graph.edge_dic[i]
-        for i in range(self.graph.v_size()):
-            for j in range(self.graph.v_size()):
-                if i == j:
-                    dist[i][j] = 0
-                elif dist[i][j] == 0:
-                    dist[i][j] = float('inf')
-        for i in range(self.graph.v_size()):
-            for j in range(self.graph.v_size()):
-                for g in range(self.graph.v_size()):
-                    if dist[j][g] > dist[j][i] + dist[i][g]:
-                        dist[j][g] = dist[j][i] + dist[i][g]
-        dis = [0 for _ in range(self.graph.v_size())]
-        for i in range(self.graph.v_size()):
-            for j in range(self.graph.v_size()):
-                if i != j and dist[i][j] > dis[i]:
-                    dis[i] = dist[i][j]
-
-        cen = 0
-        for i in range(self.graph.v_size()):
-            if dis[i] < dis[cen]:
-                cen = i
-
-        return cen, dis[cen]
-
-    def _centerPoint(self) -> (int, float):
-        ans = (0, float('inf'))
-        for src in self.graph.get_all_v().keys():
-            self.updateDijkstra(src)
-            maxDis = (src, max(self.dijkstra.dist.values()))
-            if ans[1] > maxDis[1]:
-                ans = maxDis
-        return ans
