@@ -15,9 +15,6 @@ center: using Dijkstra algorithm, i check the biggest dist for every node, and t
 
 tsp: i used in greedy algorithm, every time i take the min distance between two point in the cities list.
 
-UML
---
-
 PlotGraph
 --
 this is how the plot look like
